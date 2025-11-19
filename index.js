@@ -157,13 +157,22 @@ function createBot() {
       });
    }
 
-   bot.on('kicked', (reason) =>
-      console.log(
-         '\x1b[33m',
-         `[AfkBot] Bot was kicked from the server. Reason: \n${reason}`,
-         '\x1b[0m'
-      )
-   );
+   bot.on('kicked', (reason, loggedIn) => {
+      console.log('\x1b[33m[AfkBot] KICKED\x1b[0m loggedIn:', loggedIn);
+      console.log('\x1b[33m[AfkBot] Reason raw:\x1b[0m', reason);
+      try {
+        console.log('\x1b[33m[AfkBot] Reason JSON:\x1b[0m', JSON.stringify(reason));
+      } catch {}
+    });
+    
+    bot.on('end', (reason) => {
+      console.log('\x1b[31m[AfkBot] END event. Reason:\x1b[0m', reason);
+    });
+    
+    bot.on('error', (err) =>
+      console.log(`\x1b[31m[ERROR] ${err.stack || err.message}`, '\x1b[0m')
+    );
+    
 
    bot.on('error', (err) =>
       console.log(`\x1b[31m[ERROR] ${err.message}`, '\x1b[0m')
