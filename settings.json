@@ -16,6 +16,11 @@
     "z": -32
   },
   "utils": {
+    "auto-reply": {
+  "enabled": true,
+  "trigger-word": "Bot",
+  "replies": ["Che cazzo vuoi {user}, sei cosi disabile?", "Porco dio che ti venga la sciolta {user}", "Che cazzo vuoi {user}?"]
+},
     "auto-auth": {
       "enabled": false,
       "password": ""

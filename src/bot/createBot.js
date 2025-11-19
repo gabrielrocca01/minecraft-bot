@@ -2,6 +2,7 @@ const mineflayer = require('mineflayer');
 const { Movements } = require('mineflayer-pathfinder');
 const { pathfinder } = require('mineflayer-pathfinder');
 const { GoalBlock } = require('mineflayer-pathfinder').goals;
+const { spawnWorkerBot } = require('./spawnWorkerBot');
 const toolPlugin = require('mineflayer-tool').plugin;
 
 // moduli
@@ -10,6 +11,9 @@ const chatMessagesModule = require('./modules/chatMessages');
 const antiAfkModule = require('./modules/antiAfk');
 const positionNavigatorModule = require('./modules/positionNavigator');
 const autoReplyModule = require('./modules/autoReply');
+const playerCommandsModule = require('./modules/playerCommands');
+const autoSleepModule = require('./modules/autoSleep');
+
 
 function createBot(config) {
   const bot = mineflayer.createBot({
@@ -32,7 +36,8 @@ function createBot(config) {
     mcData,
     defaultMove,
     GoalBlock,
-    config
+    config,
+    spawnWorkerBot: (task) => spawnWorkerBot(config, task, bot)
   };
 
   // log base
@@ -60,7 +65,8 @@ function createBot(config) {
   antiAfkModule(bot, context);
   positionNavigatorModule(bot, context);
   autoReplyModule(bot, context);
-
+  playerCommandsModule(bot, context);
+  autoSleepModule(bot, context);
   return bot;
 }
 

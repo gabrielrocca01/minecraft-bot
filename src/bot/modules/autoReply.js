@@ -11,8 +11,10 @@ module.exports = function autoReplyModule(bot, { config }) {
   let lastReplyAt = 0;
 
   bot.on('chat', (username, message) => {
-    if (username === bot.username) return;
+    if (username === bot.username || message.includes('help')) return;
+    if (message.toLowerCase().startsWith('bot ')) return;
 
+    
     const now = Date.now();
     if (now - lastReplyAt < cooldownMs) return;
 
