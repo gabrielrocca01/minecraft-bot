@@ -1,0 +1,43 @@
+{
+  "bot-account": {
+    "username": "Bot",
+    "password": "",
+"type": "offline"
+  },
+  "server": {
+    "ip": "Chupapi-m3jL.aternos.me",
+    "port": 32987,
+    "version": "1.12.1"
+  },
+  "position": {
+    "enabled": true,
+    "x": 89,
+    "y": 76,
+    "z": -32
+  },
+  "utils": {
+    "auto-auth": {
+      "enabled": false,
+      "password": ""
+    },
+    "anti-afk": {
+      "enabled": true,
+      "sneak": true
+    },
+    "chat-messages": {
+      "enabled": true,
+      "repeat": true,
+      "repeat-delay": 60,
+      "messages": [
+        "Demu is a fuckin faggot",
+        "I hate niggers!",
+        "I Like to Play w Children!",
+        "I've sucked @matte19's dick",
+        "@nikthejaguar77 kys"
+      ]
+    },
+    "chat-log": true,
+    "auto-reconnect": true,
+    "auto-reconnect-delay": 5000
+  }
+}
