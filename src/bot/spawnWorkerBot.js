@@ -1,3 +1,5 @@
+// src/bot/spawnWorkerBot.js
+
 const mineflayer = require('mineflayer');
 const { Movements, pathfinder, goals: { GoalBlock } } = require('mineflayer-pathfinder');
 
@@ -25,8 +27,10 @@ function spawnWorkerBot(config, task, mainBot) {
     const move = new Movements(bot, mcData);
 
     const { owner, amount, material } = task;
+    const MAX_RADIUS = 8;          // raggio massimo intorno a homePos
+    const MAX_ATTEMPTS = 50;       // tentativi massimi di ricerca blocchi
 
-    // 1) TP vicino al player che ha invocato (usando il bot principale OP)
+    // 1) TP dal player che ha invocato
     if (mainBot && owner) {
       mainBot.chat(`/tp ${bot.username} ${owner}`);
       console.log(`[worker ${bot.username}] richiesta TP a ${owner}`);
@@ -35,8 +39,9 @@ function spawnWorkerBot(config, task, mainBot) {
     // aspetta che il TP avvenga
     await bot.waitForTicks(20);
 
-    // questa è la "home" del worker (vicino al player)
+    // homePos = dove miner deve rimanere vicino (vicino al player)
     const homePos = bot.entity.position.clone();
+    console.log(`[worker ${workerName}] homePos =`, homePos);
 
     const itemData = mcData.itemsByName[material];
     const blockData = mcData.blocksByName[material];
@@ -57,22 +62,31 @@ function spawnWorkerBot(config, task, mainBot) {
     }
 
     try {
-      bot.chat(`[${workerName}] Ciao ${owner}, sono qui. Vado a prendere ${amount} di ${material}.`);
+      bot.chat(`[${workerName}] Ciao ${owner}, sono qui. Vado a prendere ${amount} di ${material} vicino a te.`);
 
-      // 2) cerca blocchi del tipo richiesto nei dintorni
       let attempts = 0;
-      const maxAttempts = 40;
 
-      while (countItems() < amount && attempts < maxAttempts) {
+      while (countItems() < amount && attempts < MAX_ATTEMPTS) {
         attempts++;
 
+        // 2) cerca blocchi del tipo richiesto ATTORNO A homePos
         const targetBlock = bot.findBlock({
           matching: b => b && b.type === blockId,
-          maxDistance: 16,
-          count: 1
+          maxDistance: MAX_RADIUS,
+          count: 1,
+          point: homePos // centro della ricerca = vicino al player
         });
 
-        if (!targetBlock) break;
+        if (!targetBlock) {
+          console.log(`[worker ${workerName}] Nessun altro blocco ${material} entro ${MAX_RADIUS} blocchi da homePos.`);
+          break;
+        }
+
+        // sicurezza extra: se è troppo in basso, lascia perdere (no pozzi infiniti)
+        if (targetBlock.position.y < 2) {
+          console.log(`[worker ${workerName}] Blocco troppo in basso, ignoro.`);
+          break;
+        }
 
         bot.pathfinder.setMovements(move);
         bot.pathfinder.setGoal(
@@ -87,7 +101,7 @@ function spawnWorkerBot(config, task, mainBot) {
 
         try {
           await bot.dig(targetBlock);
-          await bot.waitForTicks(20);
+          await bot.waitForTicks(10);
         } catch (err) {
           console.error('[worker dig error]', err.message);
         }

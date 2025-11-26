@@ -11,7 +11,7 @@ module.exports = function autoReplyModule(bot, { config }) {
   let lastReplyAt = 0;
 
   bot.on('chat', (username, message) => {
-    if (username === bot.username || message.includes('help')) return;
+    if (username === bot.username || message.includes('help') || username.includes('Bot')) return;
     if (message.toLowerCase().startsWith('bot ')) return;
 
     

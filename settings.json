@@ -29,19 +29,24 @@
       "enabled": true,
       "sneak": true
     },
+    "auto-sleep": {
+  "enabled": false,
+  "autoGiveBed": false,
+  "fallbackTimeDay": false
+},
     "chat-messages": {
       "enabled": true,
       "repeat": true,
       "repeat-delay": 60,
       "messages": [
-        "Giuro che se questo nether a un iPhone 8 nei pantaloni...",
+        "Sono pelato ma non sono Rocky",
+        "Crazy",
+        "Giuro che se questo nether ha un iPhone 8 nei pantaloni...",
         "Porco dio non ci credo",
         "Demu è un frocio",
         "Odio i negri!",
         "Mi piace molestare i bambini!",
-        "Ho succhiato il cazzo di tutti, e il più piccolo è quello di @matte19",
-        "@nikthejaguar77 ammazzati grazie"
-      ]
+        "Ho succhiato il cazzo di tutti, e il più piccolo è quello di @matte19"      ]
     },
     "chat-log": true,
     "auto-reconnect": true,
